@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, X, Mic, Volume2, Volume2 as Volume2Off } from 'lucide-react';
+import { Send, Bot, X, Mic, Volume2, Volume2 as Volume2Off, ChefHat } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -21,7 +21,6 @@ export function ChatBot() {
   const synthRef = useRef<SpeechSynthesis | null>(null);
 
   useEffect(() => {
-    // Initialize speech recognition
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
@@ -42,7 +41,6 @@ export function ChatBot() {
       setSpeechEnabled(true);
     }
 
-    // Initialize speech synthesis
     if ('speechSynthesis' in window) {
       synthRef.current = window.speechSynthesis;
     }
@@ -85,10 +83,7 @@ export function ChatBot() {
 
   const speakMessage = (text: string) => {
     if (!synthRef.current) return;
-
-    // Cancel any ongoing speech
     synthRef.current.cancel();
-
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
@@ -110,9 +105,8 @@ export function ChatBot() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
 
-    // Simulate bot response
     setTimeout(() => {
-      const botResponse = "I'm your recipe assistant! I can help you find recipes, suggest cooking tips, and answer your culinary questions.";
+      const botResponse = "I'm your culinary AI assistant! I can help you discover recipes from around the world, suggest cooking techniques, and answer your questions about global cuisines.";
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: botResponse,
@@ -131,24 +125,24 @@ export function ChatBot() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 bg-red-600 text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition-colors"
+        className="fixed bottom-4 right-4 bg-gradient-to-r from-orange-600 to-red-600 text-white p-4 rounded-full shadow-lg hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105"
         aria-label="Open chat"
       >
-        <Bot className="w-6 h-6" />
+        <ChefHat className="w-6 h-6" />
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-4 right-4 w-96 h-[600px] bg-white rounded-lg shadow-xl flex flex-col">
-          <div className="p-4 bg-red-600 text-white rounded-t-lg flex justify-between items-center">
+        <div className="fixed bottom-4 right-4 w-96 h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+          <div className="p-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-t-2xl flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <Bot className="w-6 h-6" />
-              <h3 className="font-semibold">Recipe Assistant</h3>
+              <ChefHat className="w-6 h-6" />
+              <h3 className="font-semibold">Culinary Assistant</h3>
             </div>
             <div className="flex items-center gap-2">
               {speechEnabled && (
                 <button
                   onClick={() => setIsSpeaking(!isSpeaking)}
-                  className="hover:bg-red-700 p-1 rounded"
+                  className="hover:bg-white/20 p-2 rounded-full transition-colors"
                   aria-label={isSpeaking ? "Disable voice response" : "Enable voice response"}
                 >
                   {isSpeaking ? <Volume2 className="w-5 h-5" /> : <Volume2Off className="w-5 h-5" />}
@@ -156,7 +150,7 @@ export function ChatBot() {
               )}
               <button
                 onClick={() => setIsOpen(false)}
-                className="hover:bg-red-700 p-1 rounded"
+                className="hover:bg-white/20 p-2 rounded-full transition-colors"
                 aria-label="Close chat"
               >
                 <X className="w-5 h-5" />
@@ -164,7 +158,7 @@ export function ChatBot() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
             {messages.map(message => (
               <div
                 key={message.id}
@@ -173,10 +167,10 @@ export function ChatBot() {
                 }`}
               >
                 <div
-                  className={`max-w-[80%] p-3 rounded-lg ${
+                  className={`max-w-[80%] p-4 rounded-2xl shadow-sm ${
                     message.sender === 'user'
-                      ? 'bg-red-600 text-white'
-                      : 'bg-gray-100 text-gray-800'
+                      ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white'
+                      : 'bg-white text-gray-800'
                   }`}
                 >
                   {message.text}
@@ -186,21 +180,21 @@ export function ChatBot() {
             <div ref={messagesEndRef} />
           </div>
 
-          <form onSubmit={handleSubmit} className="p-4 border-t">
+          <form onSubmit={handleSubmit} className="p-4 bg-white border-t">
             <div className="flex gap-2">
               <input
                 ref={inputRef}
                 type="text"
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                placeholder="Ask about recipes..."
-                className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+                placeholder="Ask about any cuisine..."
+                className="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500 bg-gray-50"
               />
               {speechEnabled && (
                 <button
                   type="button"
                   onClick={toggleListening}
-                  className={`p-2 rounded-lg transition-colors ${
+                  className={`p-3 rounded-full transition-all ${
                     isListening 
                       ? 'bg-red-600 text-white animate-pulse' 
                       : 'bg-gray-100 hover:bg-gray-200'
@@ -212,7 +206,7 @@ export function ChatBot() {
               )}
               <button
                 type="submit"
-                className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
+                className="bg-gradient-to-r from-orange-600 to-red-600 text-white p-3 rounded-full hover:from-orange-700 hover:to-red-700 transition-colors"
                 aria-label="Send message"
               >
                 <Send className="w-5 h-5" />
