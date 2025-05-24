@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, X, Mic, Volume2, Volume2 as Volume2Off, ChefHat } from 'lucide-react';
+import { Send, X, Mic, Volume2, Volume2 as Volume2Off, ChefHat } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -7,6 +7,29 @@ interface Message {
   sender: 'user' | 'bot';
   timestamp: Date;
 }
+
+const recipeDatabase = {
+  getRecipeByName: (name: string) => {
+    // Simulated recipe database lookup
+    const recipes = {
+      'pizza': 'To make a traditional Italian pizza: 1. Make dough with 00 flour, yeast, salt, and water. 2. Let rise for 24h. 3. Top with San Marzano tomatoes and fresh mozzarella. 4. Bake at highest oven temperature.',
+      'pasta': 'For classic pasta: 1. Boil water with salt. 2. Cook pasta al dente. 3. Prepare sauce of choice. 4. Combine and finish with olive oil.',
+      'sushi': 'For basic sushi rolls: 1. Cook sushi rice. 2. Prepare fillings. 3. Roll with nori sheets. 4. Slice and serve with soy sauce.',
+      // Add more recipes as needed
+    };
+    return recipes[name.toLowerCase()] || 'I can help you find a recipe for that dish! What would you like to know specifically?';
+  },
+  
+  getCookingTip: (ingredient: string) => {
+    const tips = {
+      'rice': 'For perfect rice, use a 1:1.5 ratio of rice to water. Rinse until water runs clear.',
+      'pasta': 'Salt your pasta water until it tastes like the sea. This seasons the pasta from within.',
+      'meat': 'Let meat rest at room temperature before cooking and after for juicier results.',
+      // Add more tips
+    };
+    return tips[ingredient.toLowerCase()] || 'I can provide cooking tips for that ingredient. What would you like to know?';
+  }
+};
 
 export function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -105,14 +128,28 @@ export function ChatBot() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
 
+    // Enhanced bot response logic
     setTimeout(() => {
-      const botResponse = "I'm your culinary AI assistant! I can help you discover recipes from around the world, suggest cooking techniques, and answer your questions about global cuisines.";
+      let botResponse = '';
+      const lowerText = messageText.toLowerCase();
+
+      if (lowerText.includes('recipe for') || lowerText.includes('how to make')) {
+        const dish = lowerText.replace('recipe for', '').replace('how to make', '').trim();
+        botResponse = recipeDatabase.getRecipeByName(dish);
+      } else if (lowerText.includes('tip') || lowerText.includes('how do i cook')) {
+        const ingredient = lowerText.split(' ').pop() || '';
+        botResponse = recipeDatabase.getCookingTip(ingredient);
+      } else {
+        botResponse = "I'm your culinary AI assistant! I can help you with recipes, cooking tips, and techniques. What would you like to know?";
+      }
+
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: botResponse,
         sender: 'bot',
         timestamp: new Date(),
       };
+      
       setMessages(prev => [...prev, botMessage]);
       
       if (isSpeaking) {

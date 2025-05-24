@@ -274,6 +274,142 @@ const sampleRecipes: Recipe[] = [
     timeOfDay: ['lunch', 'dinner'],
     weather: ['hot', 'sunny'],
     rating: 4.7
+  },
+  {
+    id: '7',
+    name: 'Traditional Italian Margherita Pizza',
+    description: 'Authentic Neapolitan pizza with San Marzano tomatoes, fresh mozzarella, and basil.',
+    ingredients: [
+      '00 flour',
+      'Fresh yeast',
+      'San Marzano tomatoes',
+      'Fresh mozzarella',
+      'Fresh basil',
+      'Extra virgin olive oil',
+      'Sea salt'
+    ],
+    instructions: [
+      'Prepare pizza dough and let rise for 24 hours',
+      'Shape dough by hand',
+      'Top with crushed tomatoes',
+      'Add torn mozzarella',
+      'Bake in very hot oven',
+      'Finish with fresh basil and olive oil'
+    ],
+    prepTime: 1440,
+    cookTime: 5,
+    servings: 2,
+    difficulty: 'medium',
+    cuisine: 'Italian',
+    dietaryInfo: {
+      vegetarian: true,
+      vegan: false,
+      glutenFree: false,
+      dairyFree: false
+    },
+    nutritionalInfo: {
+      calories: 850,
+      protein: 24,
+      carbs: 98,
+      fat: 32
+    },
+    image: 'https://images.pexels.com/photos/1146760/pexels-photo-1146760.jpeg',
+    mood: ['casual', 'social'],
+    timeOfDay: ['lunch', 'dinner'],
+    weather: ['any'],
+    rating: 4.9
+  },
+  {
+    id: '8',
+    name: 'Greek Moussaka',
+    description: 'Layered eggplant casserole with spiced ground meat and béchamel sauce.',
+    ingredients: [
+      'Eggplants',
+      'Ground lamb',
+      'Onions',
+      'Garlic',
+      'Tomato paste',
+      'Cinnamon',
+      'Milk',
+      'Flour',
+      'Butter',
+      'Eggs'
+    ],
+    instructions: [
+      'Slice and salt eggplants',
+      'Prepare meat sauce with spices',
+      'Make béchamel sauce',
+      'Layer eggplants and meat',
+      'Top with béchamel',
+      'Bake until golden'
+    ],
+    prepTime: 60,
+    cookTime: 45,
+    servings: 8,
+    difficulty: 'hard',
+    cuisine: 'Greek',
+    dietaryInfo: {
+      vegetarian: false,
+      vegan: false,
+      glutenFree: false,
+      dairyFree: false
+    },
+    nutritionalInfo: {
+      calories: 420,
+      protein: 22,
+      carbs: 28,
+      fat: 26
+    },
+    image: 'https://images.pexels.com/photos/6607314/pexels-photo-6607314.jpeg',
+    mood: ['comfort', 'indulgent'],
+    timeOfDay: ['dinner'],
+    weather: ['cold'],
+    rating: 4.8
+  },
+  {
+    id: '9',
+    name: 'Vietnamese Pho',
+    description: 'Traditional beef noodle soup with aromatic broth and fresh herbs.',
+    ingredients: [
+      'Beef bones',
+      'Rice noodles',
+      'Bean sprouts',
+      'Thai basil',
+      'Star anise',
+      'Cinnamon stick',
+      'Fish sauce',
+      'Lime'
+    ],
+    instructions: [
+      'Simmer bones for 6-8 hours',
+      'Toast spices and add to broth',
+      'Cook rice noodles',
+      'Slice beef very thin',
+      'Assemble bowls',
+      'Serve with herbs and condiments'
+    ],
+    prepTime: 30,
+    cookTime: 480,
+    servings: 6,
+    difficulty: 'medium',
+    cuisine: 'Vietnamese',
+    dietaryInfo: {
+      vegetarian: false,
+      vegan: false,
+      glutenFree: true,
+      dairyFree: true
+    },
+    nutritionalInfo: {
+      calories: 380,
+      protein: 25,
+      carbs: 42,
+      fat: 14
+    },
+    image: 'https://images.pexels.com/photos/1731535/pexels-photo-1731535.jpeg',
+    mood: ['comfort', 'healing'],
+    timeOfDay: ['breakfast', 'lunch', 'dinner'],
+    weather: ['cold', 'rainy'],
+    rating: 4.9
   }
 ];
 
