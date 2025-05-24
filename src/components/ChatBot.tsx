@@ -10,25 +10,150 @@ interface Message {
 
 const recipeDatabase = {
   getRecipeByName: (name: string) => {
-    // Simulated recipe database lookup
     const recipes = {
-      'pizza': 'To make a traditional Italian pizza: 1. Make dough with 00 flour, yeast, salt, and water. 2. Let rise for 24h. 3. Top with San Marzano tomatoes and fresh mozzarella. 4. Bake at highest oven temperature.',
-      'pasta': 'For classic pasta: 1. Boil water with salt. 2. Cook pasta al dente. 3. Prepare sauce of choice. 4. Combine and finish with olive oil.',
-      'sushi': 'For basic sushi rolls: 1. Cook sushi rice. 2. Prepare fillings. 3. Roll with nori sheets. 4. Slice and serve with soy sauce.',
-      // Add more recipes as needed
+      'pizza': `For an authentic Italian Margherita Pizza:
+
+1. Dough:
+   - Mix 00 flour, yeast, salt, and water
+   - Knead for 10-15 minutes until smooth
+   - Let rise for 24 hours at room temperature
+
+2. Sauce:
+   - Crush San Marzano tomatoes
+   - Add a pinch of salt
+
+3. Assembly:
+   - Stretch dough by hand (don't use rolling pin)
+   - Top with tomato sauce
+   - Add fresh mozzarella pieces
+   - Drizzle with olive oil
+
+4. Baking:
+   - Bake at highest oven temperature (450-500°F)
+   - Cook for 8-10 minutes until crust is charred
+   - Finish with fresh basil leaves`,
+
+      'butter chicken': `For authentic Indian Butter Chicken:
+
+1. Marinade:
+   - Mix chicken with yogurt, garam masala, turmeric
+   - Marinate for 4-6 hours
+
+2. Sauce:
+   - Sauté onions until golden
+   - Add tomato puree, cream, butter
+   - Mix in spices: garam masala, kashmiri chili
+   - Simmer for 20 minutes
+
+3. Cooking:
+   - Grill marinated chicken until charred
+   - Add to simmering sauce
+   - Cook for 10-15 minutes
+   - Finish with kasuri methi and cream
+
+Serve hot with naan bread and rice.`,
+
+      'sushi': `For perfect Sushi rolls:
+
+1. Rice preparation:
+   - Rinse rice until water runs clear
+   - Cook with 1:1.2 ratio rice to water
+   - Season with rice vinegar mixture
+   - Fan while cooling
+
+2. Assembly:
+   - Place nori on bamboo mat
+   - Spread rice evenly
+   - Add fillings in center
+   - Roll tightly using mat
+   - Wet knife between cuts
+
+3. Tips:
+   - Use short-grain sushi rice
+   - Don't overfill rolls
+   - Keep hands wet while handling rice`,
+
+      'ramen': `For authentic Japanese Ramen:
+
+1. Broth (6-8 hours):
+   - Simmer pork bones
+   - Add kombu and dried mushrooms
+   - Season with soy sauce and mirin
+
+2. Toppings:
+   - Chashu pork (braised belly)
+   - Soft-boiled marinated eggs
+   - Bamboo shoots
+   - Green onions
+
+3. Assembly:
+   - Cook fresh noodles
+   - Add hot broth
+   - Arrange toppings
+   - Finish with nori and oil`,
     };
-    return recipes[name.toLowerCase()] || 'I can help you find a recipe for that dish! What would you like to know specifically?';
+    return recipes[name.toLowerCase()] || "I'd be happy to help you make that dish! What specific recipe would you like to learn?";
   },
   
   getCookingTip: (ingredient: string) => {
     const tips = {
-      'rice': 'For perfect rice, use a 1:1.5 ratio of rice to water. Rinse until water runs clear.',
-      'pasta': 'Salt your pasta water until it tastes like the sea. This seasons the pasta from within.',
-      'meat': 'Let meat rest at room temperature before cooking and after for juicier results.',
-      // Add more tips
+      'rice': `Perfect Rice Tips:
+1. Rinse until water runs clear
+2. Use 1:1.5 ratio (rice:water)
+3. Rest 10 minutes after cooking
+4. Fluff with fork, don't stir`,
+
+      'pasta': `Pasta Cooking Guide:
+1. Use plenty of water (1L per 100g)
+2. Salt water generously
+3. Stir during first 2 minutes
+4. Reserve pasta water for sauce
+5. Cook until al dente`,
+
+      'meat': `Meat Cooking Tips:
+1. Bring to room temperature
+2. Pat dry before cooking
+3. Preheat pan until very hot
+4. Let rest after cooking
+5. Cut against the grain`,
+
+      'vegetables': `Vegetable Cooking Tips:
+1. Don't overcrowd the pan
+2. High heat for stir-frying
+3. Season after cooking for crisp texture
+4. Blanch to preserve color`,
+
+      'fish': `Fish Cooking Guide:
+1. Pat dry thoroughly
+2. Season just before cooking
+3. Hot pan, cold oil
+4. Cook skin side first
+5. Don't overcook`,
     };
-    return tips[ingredient.toLowerCase()] || 'I can provide cooking tips for that ingredient. What would you like to know?';
-  }
+    return tips[ingredient.toLowerCase()] || "I can provide cooking tips for that ingredient. What would you like to know specifically?";
+  },
+
+  getGeneralTips: () => `Here are some essential cooking tips:
+
+1. Knife Skills:
+   - Keep knives sharp
+   - Use claw grip for safety
+   - Let knife do the work
+
+2. Temperature:
+   - Preheat pans properly
+   - Use medium heat most times
+   - Rest meats before cutting
+
+3. Seasoning:
+   - Season in layers
+   - Taste as you cook
+   - Salt enhances flavors
+
+4. Organization:
+   - Mise en place before cooking
+   - Clean as you go
+   - Read recipe completely`,
 };
 
 export function ChatBot() {
@@ -113,6 +238,42 @@ export function ChatBot() {
     synthRef.current.speak(utterance);
   };
 
+  const processUserInput = (input: string): string => {
+    const lowerInput = input.toLowerCase();
+    
+    // Check for recipe requests
+    if (lowerInput.includes('recipe for') || lowerInput.includes('how to make')) {
+      const dish = lowerInput
+        .replace('recipe for', '')
+        .replace('how to make', '')
+        .replace('how do i make', '')
+        .trim();
+      return recipeDatabase.getRecipeByName(dish);
+    }
+    
+    // Check for cooking tips
+    if (lowerInput.includes('how do i cook') || lowerInput.includes('tips for cooking')) {
+      const ingredient = lowerInput
+        .replace('how do i cook', '')
+        .replace('tips for cooking', '')
+        .trim();
+      return recipeDatabase.getCookingTip(ingredient);
+    }
+
+    // Check for general cooking questions
+    if (lowerInput.includes('cooking tips') || lowerInput.includes('kitchen tips')) {
+      return recipeDatabase.getGeneralTips();
+    }
+
+    // Default response
+    return `I'm your culinary assistant! I can help you with:
+1. Specific recipes (e.g., "How to make pizza")
+2. Cooking techniques (e.g., "How do I cook rice")
+3. General cooking tips
+
+What would you like to learn?`;
+  };
+
   const handleSubmit = async (e: React.FormEvent | null, voiceInput?: string) => {
     if (e) e.preventDefault();
     const messageText = voiceInput || input;
@@ -128,21 +289,10 @@ export function ChatBot() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
 
-    // Enhanced bot response logic
+    // Process the user's input and get response
+    const botResponse = processUserInput(messageText);
+
     setTimeout(() => {
-      let botResponse = '';
-      const lowerText = messageText.toLowerCase();
-
-      if (lowerText.includes('recipe for') || lowerText.includes('how to make')) {
-        const dish = lowerText.replace('recipe for', '').replace('how to make', '').trim();
-        botResponse = recipeDatabase.getRecipeByName(dish);
-      } else if (lowerText.includes('tip') || lowerText.includes('how do i cook')) {
-        const ingredient = lowerText.split(' ').pop() || '';
-        botResponse = recipeDatabase.getCookingTip(ingredient);
-      } else {
-        botResponse = "I'm your culinary AI assistant! I can help you with recipes, cooking tips, and techniques. What would you like to know?";
-      }
-
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: botResponse,
@@ -224,7 +374,7 @@ export function ChatBot() {
                 type="text"
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                placeholder="Ask about any cuisine..."
+                placeholder="Ask about any recipe or cooking tip..."
                 className="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500 bg-gray-50"
               />
               {speechEnabled && (
